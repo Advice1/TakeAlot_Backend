@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class StripeRestController {
     @Inject
     Payments payments;
-
+//
     ArrayList<CustomerCollection> testCreation = new ArrayList<>();
     ArrayList<StripeModel> Creation = new ArrayList<>();
     @Path("/Customer")

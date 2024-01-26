@@ -48,14 +48,21 @@ public class SubscriptionRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Users addingUsersDetails(Users store){
         users.add(store);
-        MongoDB.addUser(store).subscribe().with((data) -> {
+       /* MongoDB.addUser(store).subscribe().with((data) -> {
                 log.info("User added successfully.");
             },
             failure -> {
                 log.error("Failed to add user: " + failure);
             }
-        );
+        );*/
         return store;
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addingUsersDetailsDatabase(Users store){
+        MongoDB.addUser(store).subscribe().with(data -> log.info("User added successfully."),
+                failure -> log.error("Failed to add user: " + failure)
+        );
     }
 
    /* @Path("/database/{email}")
@@ -80,14 +87,18 @@ public class SubscriptionRestController {
     public  Products storeToCart(Products product){
         cart.add(product);
 
-        MongoDbProducts.addTocart(product).subscribe().with(results ->{
-            log.info("Success"+results);
-        }, failure ->{
-            log.error("fail"+failure);
-        });
+       // MongoDbProducts.addTocart(product).subscribe().with(results -> log.info("Success"+results), failure -> log.error("fail"+failure));
 
         return product;
     }
+/*
+    @Path("/cart/database")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void storeToCartDatabase(Products product){
+        MongoDbProducts.addTocart(product).subscribe().with(results -> log.info("Success"+results), failure -> log.error("fail"+failure));
+    }
+    */
 
     @Path("/cart/exist/{username}/{id}")
     @GET
@@ -96,16 +107,14 @@ public class SubscriptionRestController {
         boolean anyMatchResult = cart.stream()
                 .anyMatch(item -> item.getUser().equals(username)  && item.getId().equals(id));
 
-        MongoDbProducts.checkproduct(username,id).subscribe().with(results->{
-            log.info("item"+results);
-        }, System.out::println);
+       // MongoDbProducts.checkproduct(username,id).subscribe().with(results-> log.info("item"+results));
 
         return anyMatchResult;
     }
     /*@Path("/cart/exist/database/{username}/{id}")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Boolean> CheckProductExistDatabase(@PathParam("username") String username,String id){
+    public Uni<Boolean> CheckProductExistDatabase(@PathParam("username") String username, String id){
       return MongoDbProducts.checkproduct(username,id);
     }*/
     @Path("/cart/all/{username}")

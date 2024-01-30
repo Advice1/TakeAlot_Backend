@@ -104,6 +104,7 @@ public class SubscriptionRestController {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean CheckProductExist(@PathParam("username") String username,String id){
+
         boolean anyMatchResult = cart.stream()
                 .anyMatch(item -> item.getUser().equals(username)  && item.getId().equals(id));
 
